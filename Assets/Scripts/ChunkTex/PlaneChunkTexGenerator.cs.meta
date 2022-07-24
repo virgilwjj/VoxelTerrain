@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 9265733e2c6896547be026f9ba54231c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TerrainConfig: {instanceID: 0}
+  - _generatePlaneChunkTex: {fileID: 7200000, guid: 023616935b70da64d9c165c93ab4abdd, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

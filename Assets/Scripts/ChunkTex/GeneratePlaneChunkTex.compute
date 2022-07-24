@@ -1,0 +1,32 @@
+#pragma kernel GeneratePlaneChunkTex
+
+static const float isoLevel = 0.5f;
+
+RWTexture3D<float> chunkTex;
+uint numVoxelsPerAxis;
+uint numPointsPerAxis;
+float voxelSizePerAxis;
+int3 coordinate;
+uint levelOfDetail;
+
+[numthreads(8, 8, 8)]
+void GeneratePlaneChunkTex(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxis) || (id.y >= numPointsPerAxis)
+        || (id.z >= numPointsPerAxis))
+    {
+        return;
+    }
+
+    int coordY = (coordinate.y + int(id.y)
+        - int(numVoxelsPerAxis >> 1)) * int(1 << levelOfDetail);
+
+    if (coordY == 0)
+    {
+        chunkTex[id] = isoLevel;
+    }
+    else
+    {
+        chunkTex[id] = 0;
+    }
+}

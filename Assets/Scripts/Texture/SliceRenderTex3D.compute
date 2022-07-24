@@ -1,0 +1,19 @@
+#pragma kernel SliceRenderTex3D
+ 
+Texture3D<float> tex3D;
+uint width;
+uint height;
+uint depth;
+RWTexture2D<float> tex2D;
+uint z;
+
+[numthreads(32, 32, 1)]
+void SliceRenderTex3D(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= width || id.y >= height || z >= depth)
+    {
+        return;
+    }
+
+    tex2D[id.xy] = tex3D[uint3(id.xy, z)];
+}

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ded55d695c3e1c848b9257fbd78cbfec
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TerrainConfig: {instanceID: 0}
+  - _generateRegularCell: {fileID: 7200000, guid: 8121774713fe8d4478dcef14e49d3734, type: 3}
+  - _generateTransitionCell: {fileID: 7200000, guid: 6e45d58ce63035145a7bde2d08ce9735, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

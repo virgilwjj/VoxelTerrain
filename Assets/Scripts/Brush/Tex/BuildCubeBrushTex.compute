@@ -1,0 +1,24 @@
+#pragma kernel BuildCubeBlushTex
+
+RWTexture3D<float> brushTex;
+uint numVoxelsPerAxis;
+uint numPointsPerAxis;
+
+[numthreads(8, 8, 8)]
+void BuildCubeBlushTex(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxis) || (id.y >= numPointsPerAxis)
+        || (id.z >= numPointsPerAxis))
+    {
+        return;
+    }
+
+    if ((id.x == 0) || (id.x == numVoxelsPerAxis) || (id.y == 0)
+        || (id.y == numVoxelsPerAxis) || (id.z == 0)
+        || (id.z == numVoxelsPerAxis))
+    {
+        return;
+    }
+
+    brushTex[id] = 1;
+}

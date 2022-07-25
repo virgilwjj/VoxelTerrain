@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: d8954ef78e6470b4c94237263b7ee2ff
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TerrainConfig: {instanceID: 0}
+  - _buildCubeBrushTex: {fileID: 7200000, guid: e21895459162a044c93899bfa952363c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

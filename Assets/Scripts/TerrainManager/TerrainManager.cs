@@ -12,6 +12,8 @@ namespace VoxelTerrain
         TexLoader _texLoader;
         ChunkTexEditor _chunkTexEditor;
 
+        BrushTexBuilder _blushTexGenerator;
+
         void Awake()
         {
             _chunkTexGenerator = gameObject
@@ -36,6 +38,11 @@ namespace VoxelTerrain
                 .AddComponent(typeof(ChunkTexEditor))
                 as ChunkTexEditor;
             _chunkTexEditor.TerrainConfig = _terrainConfig;
+
+            _blushTexGenerator = gameObject
+                .AddComponent(typeof(SphereBrushTexBuilder))
+                as BrushTexBuilder;
+            _blushTexGenerator.TerrainConfig = _terrainConfig;
         }
 
         void Start()
@@ -46,9 +53,17 @@ namespace VoxelTerrain
             var chunkTex = _chunkTexGenerator.GenerateChunkTex(
                 coordinate, levelOfDetail);    
 
-            var blushTex = _texLoader.LoadTex3D("BlushTexs/sphere_8");
+            /*
+            for (int i = 2; i <= 16; ++i)
+            {
+                var brushTex = _blushTexGenerator.GenerateBlushTex(i);           
+                var a =  _texConverter.RenderTexToTex3D(brushTex);
+                _texLoader.SaveTex3D(a, "Textures/Brushs/sphereBrush_" + i);
+            }
+            */
             
-            _chunkTexEditor.AddEdit(chunkTex, coordinate, 0, blushTex, 8, new Vector3(3, 3, 3), 1.0f);
+            var blushTex = _blushTexGenerator.BuildBrushTex(15);           
+            _chunkTexEditor.AddEdit(chunkTex, coordinate, 0, blushTex, 15, new Vector3(0, 0, 0), 1.0f);
 
             var mesh = _chunkMeshGenerator.GenerateChunkMesh(
                 chunkTex, coordinate, levelOfDetail, lodMesk);

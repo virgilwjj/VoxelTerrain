@@ -1,0 +1,32 @@
+#pragma kernel GenerateSphereBlushTex
+
+static const float isoLevel = 0.5f;
+
+RWTexture3D<float> blushTex;
+uint numVoxelsPerAxis;
+uint numPointsPerAxis;
+float voxelSizePerAxis;
+float3 sphereCenter;
+float sphereRadius;
+
+[numthreads(8, 8, 8)]
+void GenerateSphereBlushTex(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxis) || (id.y >= numPointsPerAxis)
+        || (id.z >= numPointsPerAxis))
+    {
+        return;
+    }
+
+    float3 pos = id * voxelSizePerAxis;
+    float dist = distance(pos, sphereCenter); 
+    float value = sphereRadius - dist + isoLevel;
+    if (value > 0)
+    {
+        blushTex[id] = value;
+    }
+    else
+    {
+        blushTex[id] = 0;
+    }
+}

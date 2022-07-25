@@ -1,0 +1,57 @@
+#pragma kernel AddBlushTex
+
+static const float isoLevel = 0.5f;
+
+RWTexture3D<float> chunkTex;
+uint numVoxelsPerAxis;
+uint numPointsPerAxis;
+float voxelSizePerAxis;
+int3 coordinate;
+uint levelOfDetail;
+Texture3D<float> blushTex;
+uint numVoxelsPerAxisForBlush;
+uint numPointsPerAxisForBlush;
+int3 minCoord;
+float delta;
+
+[numthreads(8, 8, 8)]
+void AddBlushTex(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxisForBlush)
+        || (id.y >= numPointsPerAxisForBlush)
+        || (id.z >= numPointsPerAxisForBlush))
+    {
+        return;
+    }
+
+    int offsetX = minCoord.x + int(id.x) - (coordinate.x - int(numVoxelsPerAxis >> 1));
+    int offsetY = minCoord.y + int(id.y) - (coordinate.y - int(numVoxelsPerAxis >> 1));
+    int offsetZ = minCoord.z + int(id.z) - (coordinate.z - int(numVoxelsPerAxis >> 1));
+
+    int scale = 1 << levelOfDetail;
+
+    if ((offsetX % scale != 0)
+        || (offsetY % scale != 0)
+        || (offsetZ % scale != 0))
+    {
+        return;
+    }
+
+    int idForChunkX = offsetX / scale;
+    int idForChunkY = offsetY / scale;
+    int idForChunkZ = offsetZ / scale;
+
+    if ((idForChunkX < 0) 
+        || (idForChunkX >= numPointsPerAxis)
+        || (idForChunkY < 0)
+        || (idForChunkY >= numPointsPerAxis)
+        || (idForChunkZ < 0)
+        || (idForChunkZ >= numPointsPerAxis))
+    {
+        return;
+    }
+
+    uint3 idForChunk = uint3(idForChunkX, idForChunkY, idForChunkZ);
+
+    chunkTex[idForChunk] += blushTex[id] * delta;
+}

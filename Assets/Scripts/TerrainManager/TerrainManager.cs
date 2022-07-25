@@ -8,6 +8,9 @@ namespace VoxelTerrain
         TerrainConfig _terrainConfig;
         ChunkTexGenerator _chunkTexGenerator;
         ChunkMeshGenerator _chunkMeshGenerator;
+        TexConverter _texConverter;
+        TexLoader _texLoader;
+        ChunkTexEditor _chunkTexEditor;
 
         void Awake()
         {
@@ -20,6 +23,19 @@ namespace VoxelTerrain
                 .AddComponent(typeof(TransvoxelGenerator))
                 as ChunkMeshGenerator;
             _chunkMeshGenerator.TerrainConfig = _terrainConfig;
+
+            _texConverter = gameObject
+                .AddComponent(typeof(TexConverter))
+                as TexConverter;
+
+            _texLoader = gameObject
+                .AddComponent(typeof(TexLoader))
+                as TexLoader;
+
+            _chunkTexEditor = gameObject
+                .AddComponent(typeof(ChunkTexEditor))
+                as ChunkTexEditor;
+            _chunkTexEditor.TerrainConfig = _terrainConfig;
         }
 
         void Start()
@@ -29,6 +45,11 @@ namespace VoxelTerrain
             var lodMesk = LodMask.None;
             var chunkTex = _chunkTexGenerator.GenerateChunkTex(
                 coordinate, levelOfDetail);    
+
+            var blushTex = _texLoader.LoadTex3D("BlushTexs/sphere_8");
+            
+            _chunkTexEditor.AddEdit(chunkTex, coordinate, 0, blushTex, 8, new Vector3(3, 3, 3), 1.0f);
+
             var mesh = _chunkMeshGenerator.GenerateChunkMesh(
                 chunkTex, coordinate, levelOfDetail, lodMesk);
 

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c3fd7e60c4cc9e44bb448e057a7ee81, type: 3}
   m_Name: DebugTerrainConfig
   m_EditorClassIdentifier: 
-  _powerVoxelsPerAxisForChunk: 2
-  _levelOfDetail: 1
+  _powerVoxelsPerAxisForChunk: 4
+  _levelOfDetail: 0
   _voxelSizePerAxis: 1

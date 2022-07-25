@@ -36,17 +36,19 @@ namespace VoxelTerrain
         {
             if (Input.GetKey(KeyCode.W))
             {
-                _cameraTrans.Translate(Vector3.forward * Time.deltaTime * _moveSpeed);
+                //_cameraTrans.Translate(Vector3.forward * Time.deltaTime * _moveSpeed);
+                transform.Translate(Vector3.forward * Time.deltaTime * _moveSpeed);
             }
  
             if (Input.GetKey(KeyCode.S))
             {
-                _cameraTrans.Translate(Vector3.back * Time.deltaTime * _moveSpeed);
+                //_cameraTrans.Translate(Vector3.back * Time.deltaTime * _moveSpeed);
+                transform.Translate(Vector3.back * Time.deltaTime * _moveSpeed);
             }
  
             if (Input.GetKey(KeyCode.A))
             {
-                _cameraTrans.Translate(Vector3.left * Time.deltaTime * _moveSpeed);
+                //_cameraTrans.Translate(Vector3.left * Time.deltaTime * _moveSpeed);
             }
  
             if (Input.GetKey(KeyCode.D))

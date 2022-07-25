@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 36c9bcffad2f8464abbc4ea4a294ff5f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TerrainConfig: {instanceID: 0}
+  - _chunkTexEditor: {fileID: 7200000, guid: 7df23cef5d098a44e8423471147103ad, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

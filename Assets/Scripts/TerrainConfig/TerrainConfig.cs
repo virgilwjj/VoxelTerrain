@@ -16,6 +16,8 @@ namespace VoxelTerrain
         float _voxelSizePerAxis;
         [SerializeField, Range(0, 1)]
         float _isoLevel = 0.5f;
+        [SerializeField]
+        float[] _lodThresholds;
 
         public int NumVoxelsPerAxisForChunk
             => 1 << _powerVoxelsPerAxisForChunk;
@@ -28,6 +30,7 @@ namespace VoxelTerrain
             => NumVoxelsPerAxisForTerrain + 1;
         public float VoxelSizePerAxis => _voxelSizePerAxis;
         public float IsoLevel => _isoLevel;
+        public float[] LodThresholds => _lodThresholds;
 
     }
 

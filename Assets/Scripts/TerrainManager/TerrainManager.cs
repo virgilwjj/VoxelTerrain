@@ -63,7 +63,7 @@ namespace VoxelTerrain
             */
             
             var blushTex = _blushTexGenerator.BuildBrushTex(15);           
-            _chunkTexEditor.AddEdit(chunkTex, coordinate, 0, blushTex, 15, new Vector3(0, 0, 0), 1.0f);
+            _chunkTexEditor.AddEdit(chunkTex, coordinate, 0, blushTex, 15, new Vector3(0, 0, 0), 1.0f, 1.0f);
 
             var mesh = _chunkMeshGenerator.GenerateChunkMesh(
                 chunkTex, coordinate, levelOfDetail, lodMesk);

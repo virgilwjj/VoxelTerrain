@@ -13,13 +13,14 @@ namespace VoxelTerrain
         public void AddEdit(RenderTexture chunkTex,
             Vector3Int coordinate, int levelOfDetail,
             Texture blushTex, int numVoxelsPerAxisForBlush,
-            Vector3 hitPoint, float delta)
+            Vector3 hitPoint, float delta, float weight)
         {
             var numVoxelsPerAxis
                 = TerrainConfig.NumVoxelsPerAxisForChunk;
             var numPointsPerAxis
                 = TerrainConfig.NumPointsPerAxisForChunk;
             var voxelSizePerAxis = TerrainConfig.VoxelSizePerAxis;
+            var isoLevel = TerrainConfig.IsoLevel;
             var numPointsPerAxisForBlush
                 = numVoxelsPerAxisForBlush + 1;
 
@@ -47,23 +48,27 @@ namespace VoxelTerrain
                 numPointsPerAxis);
             _chunkTexEditor.SetFloat("voxelSizePerAxis",
                 voxelSizePerAxis);
+            _chunkTexEditor.SetFloat("isoLevel",
+                isoLevel);
             _chunkTexEditor.SetVectorInt("coordinate",
                 coordinate);
             _chunkTexEditor.SetInt("levelOfDetail",
                 levelOfDetail);
-            _chunkTexEditor.SetTexture(0, "blushTex",
+            _chunkTexEditor.SetTexture(0, "brushTex",
                 blushTex); 
-            _chunkTexEditor.SetInt("numVoxelsPerAxisForBlush",
+            _chunkTexEditor.SetInt("numVoxelsPerAxisForBrush",
                 numVoxelsPerAxisForBlush);
-            _chunkTexEditor.SetInt("numPointsPerAxisForBlush",
+            _chunkTexEditor.SetInt("numPointsPerAxisForBrush",
                 numPointsPerAxisForBlush);
             _chunkTexEditor.SetVectorInt("minCoord", minCoord);
             _chunkTexEditor.SetFloat("delta", delta);
+            _chunkTexEditor.SetFloat("weight", weight);
             
             _chunkTexEditor.DispatchThreads(0,
                 numPointsPerAxisForBlush, numPointsPerAxisForBlush,
                 numPointsPerAxisForBlush);
         }
+
     }
 
 }

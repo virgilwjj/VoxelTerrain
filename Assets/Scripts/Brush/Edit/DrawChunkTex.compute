@@ -1,25 +1,25 @@
-#pragma kernel AddBlushTex
-
-static const float isoLevel = 0.5f;
+#pragma kernel DrawChunkTex
 
 RWTexture3D<float> chunkTex;
 uint numVoxelsPerAxis;
 uint numPointsPerAxis;
 float voxelSizePerAxis;
+float isoLevel;
 int3 coordinate;
 uint levelOfDetail;
-Texture3D<float> blushTex;
-uint numVoxelsPerAxisForBlush;
-uint numPointsPerAxisForBlush;
+Texture3D<float> brushTex;
+uint numVoxelsPerAxisForBrush;
+uint numPointsPerAxisForBrush;
 int3 minCoord;
 float delta;
+float weight;
 
 [numthreads(8, 8, 8)]
-void AddBlushTex(uint3 id : SV_DispatchThreadID)
+void DrawChunkTex(uint3 id : SV_DispatchThreadID)
 {
-    if ((id.x >= numPointsPerAxisForBlush)
-        || (id.y >= numPointsPerAxisForBlush)
-        || (id.z >= numPointsPerAxisForBlush))
+    if ((id.x >= numPointsPerAxisForBrush)
+        || (id.y >= numPointsPerAxisForBrush)
+        || (id.z >= numPointsPerAxisForBrush))
     {
         return;
     }
@@ -53,5 +53,5 @@ void AddBlushTex(uint3 id : SV_DispatchThreadID)
 
     uint3 idForChunk = uint3(idForChunkX, idForChunkY, idForChunkZ);
 
-    chunkTex[idForChunk] += blushTex[id] * delta;
+    chunkTex[idForChunk] += brushTex[id] * delta * weight;
 }

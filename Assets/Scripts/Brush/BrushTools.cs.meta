@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0894f80eab95f7248ad412c54b0d748c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _brushSetting: {fileID: 11400000, guid: 165cbfe8b9bbaa4459e4f4e9f7c06494, type: 2}
+  - _chunkSetting: {fileID: 11400000, guid: ee2bb24cb7d63784aa64a0a892e8444a, type: 2}
+  - _buildSphereBrushTex: {fileID: 7200000, guid: a414e112777f62a44a5394c4684457ed, type: 3}
+  - _buildCubeBrushTex: {fileID: 7200000, guid: 3d2671c307cd8904587dd42631f8984d, type: 3}
+  - _useBrush: {fileID: 7200000, guid: f25c51b86ce3f9f4a875ff5ed022fbed, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,19 @@
+#pragma kernel ComposeRenderTex3D
+ 
+RWTexture3D<float> tex3D;
+uint width;
+uint height;
+uint depth;
+Texture2D<float> tex2D;
+uint z;
+
+[numthreads(32, 32, 1)]
+void ComposeRenderTex3D(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= width || id.y >= height || z >= depth)
+    {
+        return;
+    }
+
+    tex3D[uint3(id.xy, z)] = tex2D[id.xy];
+}

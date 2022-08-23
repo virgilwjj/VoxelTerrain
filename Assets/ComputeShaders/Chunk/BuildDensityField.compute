@@ -1,0 +1,22 @@
+#pragma kernel BuildDensityField
+#include "../Include/Chunk.compute"
+
+float voxelSizePerAxis;
+int3 minCoord;
+int stridePerAxis;
+RWStructuredBuffer<float> densityField;
+
+[numthreads(8, 8, 8)]
+void BuildDensityField(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= numPointsPerAxis || id.y >= numPointsPerAxis || id.z >= numPointsPerAxis)
+    {
+        return;
+    }
+
+    int3 coord = minCoord + int3(id) * stridePerAxis;
+    float3 pos = coord * voxelSizePerAxis;
+
+    uint index = getIndexById(id);
+    densityField[index] = pos.y + 4;
+}

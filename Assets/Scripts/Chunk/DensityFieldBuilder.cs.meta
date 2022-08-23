@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 690cfa3251a300444abe1ba640cf335d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _chunkSetting: {fileID: 11400000, guid: ee2bb24cb7d63784aa64a0a892e8444a, type: 2}
+  - _buildDensityBuilder: {fileID: 7200000, guid: 30ff53428a2d9ba4b9e58ba4e9bfdfbd, type: 3}
+  - _buildNoiseDensityBuilder: {fileID: 7200000, guid: f1173d40eacfdcc4385cf10ced3d6802, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f0ec6e8db0404b84db912b1850003a36
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _chunkSetting: {fileID: 11400000, guid: ee2bb24cb7d63784aa64a0a892e8444a, type: 2}
+  - _generateRegularCell: {fileID: 7200000, guid: 30e432aeae6205240bcc1f5ba6f1b786, type: 3}
+  - _generateTransitionCell: {fileID: 7200000, guid: 1fff94fe563149048bffc0ec29fa02fe, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

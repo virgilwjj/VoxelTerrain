@@ -1,0 +1,55 @@
+﻿#pragma kernel JFA
+#pragma kernel Preprocess
+#pragma kernel Postprocess
+
+uint dispatchCubeSide;
+uint samplingOffset;
+float postProcessThickness;
+RWTexture3D<float4> Voxels;
+RWStructuredBuffer<float> pointBuffer;
+uint voxelSide;
+
+[numthreads(8, 8, 8)]
+void Preprocess(uint3 id : SV_DispatchThreadID) {
+	float isVoxel = Voxels[id].x;
+	Voxels[id] = float4(float(id.x), float(id.y), float(id.z), isVoxel);
+}
+
+void JFAIter(uint offset, uint3 id) {
+	float3 idF = float3(id);
+	float4 closest = Voxels[id];
+	float closestDist = 5000.0f;
+	uint3 bounds = uint3(dispatchCubeSide, dispatchCubeSide, dispatchCubeSide);
+	for (uint i = 0; i < 3; i++) {
+		for (uint j = 0; j < 3; j++) {
+			for (uint k = 0; k < 3; k++) {
+
+				uint3 at = uint3(i - 1, j - 1, k - 1) * offset + id;
+				if (any(at < 0) || any(at >= bounds)) continue;
+				float4 voxel = Voxels[at];
+				// non seed / hasn't seen a seed
+				if (voxel.w == 0.0f) continue;
+				float voxelDist = distance(idF, voxel.xyz);
+				if (voxelDist < closestDist) {
+					closestDist = voxelDist;
+					closest = voxel;
+				}
+			}
+		}
+	}
+	Voxels[id] = closest;
+}
+
+[numthreads(8, 8, 8)]
+void JFA(uint3 id : SV_DispatchThreadID) {
+	JFAIter(samplingOffset, id);
+}
+
+[numthreads(8, 8, 8)]
+void Postprocess(uint3 id : SV_DispatchThreadID) {
+	float3 seedPos = Voxels[id].xyz;
+	float dist = (distance(seedPos, float3(id)) / float(dispatchCubeSide)) - postProcessThickness;
+	Voxels[id] = float4(dist, dist, dist, 1.0);
+	uint index = (id.y * voxelSide + id.z) * voxelSide + id.x;
+	pointBuffer[index] = dist * voxelSide;
+}

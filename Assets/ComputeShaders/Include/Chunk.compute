@@ -1,0 +1,65 @@
+#ifndef CHUNK
+#define CHUNK
+#include "./MortonCode.compute"
+
+uint numVoxelsPerAxis;
+uint numPointsPerAxis;
+
+
+uint getIndexById(uint3 id)
+{
+    return (id.y * numPointsPerAxis + id.z) * numPointsPerAxis + id.x;
+}
+
+/*
+uint getIndexById(uint3 id)
+{
+    if (id.x != numVoxelsPerAxis && id.y != numVoxelsPerAxis && id.z != numVoxelsPerAxis)
+    {
+        return morton3Encode(id);
+    }
+    else if (id.x != numVoxelsPerAxis && id.y == numVoxelsPerAxis && id.z != numVoxelsPerAxis)
+    {
+        return numVoxelsPerAxis * numVoxelsPerAxis * numVoxelsPerAxis
+            + morton2Encode(id.xz);
+    }
+    else if (id.x != numVoxelsPerAxis && id.y != numVoxelsPerAxis && id.z == numVoxelsPerAxis)
+    {
+        return numVoxelsPerAxis * numVoxelsPerAxis * numVoxelsPerAxis 
+            + numVoxelsPerAxis * numVoxelsPerAxis
+            + morton2Encode(id.xy);
+    }
+    else if (id.x == numVoxelsPerAxis && id.y != numVoxelsPerAxis && id.z != numVoxelsPerAxis)
+    {
+        return numVoxelsPerAxis * numVoxelsPerAxis * numVoxelsPerAxis 
+            + numVoxelsPerAxis * numVoxelsPerAxis * 2
+            + morton2Encode(id.zy);
+    }
+    else if (id.x != numVoxelsPerAxis && id.y == numVoxelsPerAxis && id.z == numVoxelsPerAxis)
+    {
+        return numVoxelsPerAxis * numVoxelsPerAxis * numVoxelsPerAxis 
+            + numVoxelsPerAxis * numVoxelsPerAxis * 3
+            + id.x;
+    }
+    else if (id.x == numVoxelsPerAxis && id.y == numVoxelsPerAxis && id.z != numVoxelsPerAxis)
+    {
+        return numVoxelsPerAxis * numVoxelsPerAxis * numVoxelsPerAxis 
+            + numVoxelsPerAxis * numVoxelsPerAxis * 3
+            + numVoxelsPerAxis
+            + id.z;
+    }
+    else if (id.x == numVoxelsPerAxis && id.y != numVoxelsPerAxis && id.z == numVoxelsPerAxis)
+    {
+        return numVoxelsPerAxis * numVoxelsPerAxis * numVoxelsPerAxis 
+            + numVoxelsPerAxis * numVoxelsPerAxis * 3
+            + numVoxelsPerAxis * 2
+            + id.y;
+    }
+    else
+    {
+        return numPointsPerAxis * numPointsPerAxis * numPointsPerAxis - 1;
+    }
+}
+*/
+
+#endif

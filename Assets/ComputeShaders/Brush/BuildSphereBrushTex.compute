@@ -1,0 +1,28 @@
+#pragma kernel BuildSphereBlushTex
+#include "../Include/Math.compute"
+
+float voxelSizePerAxis;
+float isoLevel;
+
+RWTexture3D<float> brushTex;
+uint numPointsPerAxisForBrush;
+float3 sphereCenter;
+float sphereRadius;
+
+[numthreads(8, 8, 8)]
+void BuildSphereBlushTex(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxisForBrush) || (id.y >= numPointsPerAxisForBrush) || (id.z >= numPointsPerAxisForBrush))
+    {
+        return;
+    }
+
+    float3 pos = id * voxelSizePerAxis;
+    float value = distance(pos, sphereCenter) - sphereCenter;
+
+    if (isLowerEqual(value, 0))
+    {
+        brushTex[id] = value;
+    }
+
+}

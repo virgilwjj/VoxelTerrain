@@ -1,0 +1,47 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel MeshToVoxel
+#pragma kernel Zero
+
+uint tris;
+int numSamples;
+float scale;
+float3 offset;
+uint voxelSide;
+
+StructuredBuffer<float3> VertexBuffer;
+StructuredBuffer<int> IndexBuffer;
+RWTexture3D<float4> Voxels;
+
+[numthreads(8, 8, 8)]
+void Zero(uint3 id : SV_DispatchThreadID) {
+	if (any(id < 0) || any(id > voxelSide))
+	{
+		return;
+	}
+	Voxels[id] = float4(0, 0, 0, 0);
+}
+
+[numthreads(512, 1, 1)]
+void MeshToVoxel(uint3 id : SV_DispatchThreadID)
+{
+	uint triID = id.x * 3;
+	if (triID >= tris * 3) return;
+	float3 a = VertexBuffer[IndexBuffer[triID + 0]] * scale + offset;
+	float3 b = VertexBuffer[IndexBuffer[triID + 1]] * scale + offset;
+	float3 c = VertexBuffer[IndexBuffer[triID + 2]] * scale + offset;
+	float3 AB = b - a;
+	float3 AC = c - a;
+	float side = float(voxelSide);
+
+	for (int i = 0; i < numSamples; i++) {
+		float2 s = float2(frac(0.7548776662466927 * i), frac(0.5698402909980532 * i));
+		s = s.x + s.y > 1.0 ? 1.0 - s : s;
+		float3 pointOnTri = a + s.x * AB + s.y * AC;
+		float3 scaled = pointOnTri * side;
+		uint3 voxelIdx = uint3(floor(scaled));
+		if (!(any(voxelIdx < 0) || any(voxelIdx >= voxelSide))) {
+			float distFromCenter = 1.0 - length(frac(scaled) - float3(0.5, 0.5, 0.5));
+			Voxels[voxelIdx] = float4(distFromCenter, distFromCenter, distFromCenter, distFromCenter);
+		}
+	}
+}

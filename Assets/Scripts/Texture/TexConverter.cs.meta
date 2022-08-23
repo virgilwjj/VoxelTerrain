@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 6cb5fc23e54530b429a04286a3efe8da
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _sliceRenderTex3D: {fileID: 7200000, guid: e4a48fb865add2b4c8e65e6049af01d4, type: 3}
+  - _composeRenderTex3D: {fileID: 7200000, guid: 595d5f57f8f74d24fab76d6773d220de, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

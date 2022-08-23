@@ -1,0 +1,35 @@
+#pragma kernel BuildCubeBlushTex
+#include "../Include/Math.compute"
+
+float voxelSizePerAxis;
+float isoLevel;
+
+RWTexture3D<float> brushTex;
+uint numPointsPerAxisForBrush;
+float3 cubeCenter;
+float cubeExtents;
+
+[numthreads(8, 8, 8)]
+void BuildCubeBlushTex(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxisForBrush) || (id.y >= numPointsPerAxisForBrush) || (id.z >= numPointsPerAxisForBrush))
+    {
+        return;
+    }
+
+    float3 pos = id * voxelSizePerAxis;
+
+    float3 cubeMin = cubeCenter - float3(1, 1, 1) * cubeExtents;
+    float3 cubeMax = cubeCenter + float3(1, 1, 1) * cubeExtents;
+
+    float value = min(cubeMin.x - pos.x, pos.x - cubeMax.x);
+    value = min(value, cubeMin.y - pos.y);
+    value = min(value, pos.y - cubeMax.y);
+    value = min(value, cubeMin.z - pos.z);
+    value = min(value, pos.z - cubeMax.z);
+
+    if (isLowerEqual(value, 0))
+    {
+        brushTex[id] = value;
+    }
+}

@@ -1,0 +1,262 @@
+#pragma kernel GenerateRegularCell
+#include "./Transvoxel.compute"
+#include "../Include/Math.compute"
+#include "../Include/Chunk.compute"
+
+struct Triangle
+{
+    float3 vertex0;
+    float3 normal0;
+    float3 vertex1;
+    float3 normal1;
+    float3 vertex2;
+    float3 normal2;
+};
+
+static const uint LodMaskNone = 0;
+static const uint LodMaskNegativeX = 1 << 0;
+static const uint LodMaskPositionX = 1 << 1;
+static const uint LodMaskNegativeY = 1 << 2;
+static const uint LodMaskPositionY = 1 << 3;
+static const uint LodMaskNegativeZ = 1 << 4;
+static const uint LodMaskPositionZ = 1 << 5;
+
+float voxelSizePerAxis;
+float isoLevel;
+int3 centerCoord;
+int3 minCoord;
+int stridePerAxis;
+uint lodMask;
+StructuredBuffer<float> densityField;
+AppendStructuredBuffer<Triangle> trisBuffer;
+
+float3 getPointLocalPos(uint3 id)
+{
+    int3 coord = minCoord + int3(id) * stridePerAxis;
+    int3 localCoord = coord - centerCoord;
+    return localCoord * voxelSizePerAxis;
+}
+
+float3 getPointGrad(uint3 id)
+{
+    uint leftX = (id.x >= 1) ? (id.x - 1) : 0;
+    uint3 leftId = uint3(leftX, id.y, id.z);
+    uint leftIndex = getIndexById(leftId);
+    float left = densityField[leftIndex]; 
+
+    uint rightX = (id.x < (numPointsPerAxis - 1)) ? (id.x + 1) : (numPointsPerAxis - 1);
+    uint3 rightId = uint3(rightX, id.y, id.z);
+    uint rightIndex = getIndexById(rightId);
+    float right = densityField[rightIndex]; 
+
+    uint downY = (id.y >= 1) ? (id.y - 1) : 0;
+    uint3 downId = uint3(id.x, downY, id.z);
+    uint downIndex = getIndexById(downId);
+    float down = densityField[downIndex]; 
+
+    uint upY = (id.y < (numPointsPerAxis - 1)) ? (id.y + 1) : (numPointsPerAxis - 1);
+    uint3 upId = uint3(id.x, upY, id.z);
+    uint upIndex = getIndexById(upId);
+    float up = densityField[upIndex]; 
+
+    uint backZ = (id.z >= 1) ? (id.z - 1) : 0;
+    uint3 backId = uint3(id.x, id.y, backZ);
+    uint backIndex = getIndexById(backId);
+    float back = densityField[backIndex]; 
+
+    uint forwardZ = (id.z < (numPointsPerAxis - 1)) ? (id.z + 1) : (numPointsPerAxis - 1);
+    uint3 forwardId = uint3(id.x, id.y, forwardZ);
+    uint forwardIndex = getIndexById(forwardId);
+    float forward = densityField[forwardIndex]; 
+
+    float dx = right - left;
+    float dy = up - down;
+    float dz = forward - back;
+
+    return float3(dx, dy, dz);
+}
+
+float3 getVertexOffset(uint3 id)
+{
+    float3 vertexOffset = float3(0, 0, 0);
+    float offset = stridePerAxis * voxelSizePerAxis * 0.5;
+    if (((lodMask & LodMaskNegativeX) != 0) && (id.x == 0))
+    {
+        vertexOffset.x += offset;
+    }
+    if (((lodMask & LodMaskPositionX) != 0) && (id.x == (numPointsPerAxis - 1)))
+    {
+        vertexOffset.x -= offset;
+    }
+    if (((lodMask & LodMaskNegativeY) != 0) && (id.y == 0))
+    {
+        vertexOffset.y += offset;
+    }
+    if (((lodMask & LodMaskPositionY) != 0) && (id.y == (numPointsPerAxis - 1)))
+    {
+        vertexOffset.y -= offset;
+    }
+    if (((lodMask & LodMaskNegativeZ) != 0) && (id.z == 0))
+    {
+        vertexOffset.z += offset;
+    }
+    if (((lodMask & LodMaskPositionZ) != 0) && (id.z == (numPointsPerAxis - 1)))
+    {
+        vertexOffset.z -= offset;
+    }
+    return vertexOffset;
+}
+
+[numthreads(4, 4, 4)]
+void GenerateRegularCell(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numVoxelsPerAxis) || (id.y >= numVoxelsPerAxis) || (id.z >= numVoxelsPerAxis))
+    {
+        return;
+    }
+
+    /*
+       6---------7
+      /|        /|
+     / |       / |
+    4---------5  |
+    |  2------|--3
+    | /       | /
+    |/        |/
+    0---------1
+    */
+    uint3 cornerIds[8];
+    cornerIds[0] = id + uint3(0, 0, 0); 
+    cornerIds[1] = id + uint3(1, 0, 0); 
+    cornerIds[2] = id + uint3(0, 0, 1); 
+    cornerIds[3] = id + uint3(1, 0, 1); 
+    cornerIds[4] = id + uint3(0, 1, 0); 
+    cornerIds[5] = id + uint3(1, 1, 0); 
+    cornerIds[6] = id + uint3(0, 1, 1); 
+    cornerIds[7] = id + uint3(1, 1, 1); 
+
+    float cornerValues[8];
+    for (uint i = 0; i < 8; ++i)
+    {
+        uint index = getIndexById(cornerIds[i]);
+        cornerValues[i] = densityField[index];
+    }
+
+    uint caseCode = 0;
+    if (isLowerEqual(cornerValues[0], isoLevel)) caseCode |= 1;
+    if (isLowerEqual(cornerValues[1], isoLevel)) caseCode |= 2;
+    if (isLowerEqual(cornerValues[2], isoLevel)) caseCode |= 4;
+    if (isLowerEqual(cornerValues[3], isoLevel)) caseCode |= 8;
+    if (isLowerEqual(cornerValues[4], isoLevel)) caseCode |= 16;
+    if (isLowerEqual(cornerValues[5], isoLevel)) caseCode |= 32;
+    if (isLowerEqual(cornerValues[6], isoLevel)) caseCode |= 64;
+    if (isLowerEqual(cornerValues[7], isoLevel)) caseCode |= 128;
+
+    if (caseCode == 0 || caseCode == 255)
+    {
+        return;
+    }
+
+    uint cellClass = regularCellClass[caseCode];
+    RegularCellData cellData = regularCellData[cellClass];
+
+    float3 edgeVertices[12];
+    float3 edgeNormals[12]; 
+
+    uint vertexCount = cellData.GetVertexCount();
+    uint vertexData[] = regularVertexData[caseCode];
+    for (i = 0; i < vertexCount; ++i)
+    {
+        uint edgeCase = vertexData[i];
+        uint v0 = (edgeCase >> 4) & 0x0F;
+        uint v1 = edgeCase & 0x0F;
+
+        uint3 id0 = cornerIds[v0];
+        uint3 id1 = cornerIds[v1];
+
+        float density0 = cornerValues[v0];
+        float density1 = cornerValues[v1];
+
+        if (isEqual(density0, density1))
+        {
+            float3 vertex0 = getPointLocalPos(id0);
+            float3 vertex1 = getPointLocalPos(id1);
+            if (lodMask != LodMaskNone)
+            {
+                float3 offset0 = getVertexOffset(id0);
+                vertex0 += offset0;
+                float3 offset1 = getVertexOffset(id1);
+                vertex1 += offset1;
+            }
+            edgeVertices[i] = (vertex0 + vertex1) * 0.5f;
+
+            float3 normal0 = getPointGrad(id0);
+            float3 normal1 = getPointGrad(id1);
+            edgeNormals[i] = normalize((normal0 + normal1) * 0.5f);
+        }
+        else if (isEqual(density0, isoLevel))
+        {
+            float3 vertex0 = getPointLocalPos(id0);
+            if (lodMask != LodMaskNone)
+            {
+                float3 offset0 = getVertexOffset(id0);
+                vertex0 += offset0;
+            }
+            edgeVertices[i] = vertex0;
+
+            float3 normal0 = getPointGrad(id0);
+            edgeNormals[i] = normalize(normal0); 
+        }
+        else if (isEqual(isoLevel, density1))
+        {
+            float3 vertex1 = getPointLocalPos(id1);
+            if (lodMask != LodMaskNone)
+            {
+                float3 offset1 = getVertexOffset(id1);
+                vertex1 += offset1;
+            }
+            edgeVertices[i] = vertex1;
+
+            float3 normal1 = getPointGrad(id1);
+            edgeNormals[i] = normalize(normal1); 
+        }
+        else
+        {
+            float t = (density1 - isoLevel) / (density1 - density0);
+
+            float3 vertex0 = getPointLocalPos(id0);
+            float3 vertex1 = getPointLocalPos(id1);
+            if (lodMask != LodMaskNone)
+            {
+                float3 offset0 = getVertexOffset(id0);
+                vertex0 += offset0;
+                float3 offset1 = getVertexOffset(id1);
+                vertex1 += offset1;
+            }
+            edgeVertices[i] = t * vertex0 + (1 - t) * vertex1;
+
+            float3 normal0 = getPointGrad(id0);
+            float3 normal1 = getPointGrad(id1);
+            edgeNormals[i] = normalize(t * normal0 + (1 - t) * normal1);
+        }
+    }
+
+    uint triangleCount = cellData.GetTriangleCount();
+    uint vertexIndex[] = cellData.vertexIndex;
+    for (i = 0; i < triangleCount; ++i)
+    {
+        // Unity's Order
+        uint v0 = vertexIndex[3 * i + 2];
+        uint v1 = vertexIndex[3 * i + 1];
+        uint v2 = vertexIndex[3 * i + 0];
+
+        Triangle tri;
+        tri.vertex0 = edgeVertices[v0];
+        tri.normal0 = edgeNormals[v0];
+        tri.vertex1 = edgeVertices[v1];
+        tri.normal1 = edgeNormals[v1];
+        tri.vertex2 = edgeVertices[v2];
+        tri.normal2 = edgeNormals[v2];
+        trisBuffer.Append(tri);
+    }
+}

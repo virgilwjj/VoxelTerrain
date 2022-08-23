@@ -1,0 +1,48 @@
+#pragma kernel UseBrush
+#include "../Include/Chunk.compute"
+
+float voxelSizePerAxis;
+float isoLevel;
+
+RWStructuredBuffer<float> densityField;
+int3 minCoord;
+int stridePerAxis;
+Texture3D<float> brushTex;
+uint numPointsPerAxisForBrush;
+int3 minCoordForBrush;
+float weight;
+float delta;
+
+[numthreads(8, 8, 8)]
+void UseBrush(uint3 id : SV_DispatchThreadID)
+{
+    if ((id.x >= numPointsPerAxisForBrush) || (id.y >= numPointsPerAxisForBrush) || (id.z >= numPointsPerAxisForBrush))
+    {
+        return;
+    }
+
+    int3 offset = minCoordForBrush + int3(id) - minCoord; 
+
+    if ((offset.x < 0) || (offset.y < 0) || (offset.z < 0))
+    {
+        return;
+    }
+
+    if ((uint(offset.x) % uint(stridePerAxis) != 0) || (uint(offset.y) % uint(stridePerAxis) != 0) || (uint(offset.z) % uint(stridePerAxis) != 0))
+    {
+        return;
+    }
+
+    uint3 idForChunk;
+    idForChunk.x = uint(offset.x) / uint(stridePerAxis);
+    idForChunk.y = uint(offset.y) / uint(stridePerAxis);
+    idForChunk.z = uint(offset.z) / uint(stridePerAxis);
+
+    if ((idForChunk.x >= numPointsPerAxis) || (idForChunk.y >= numPointsPerAxis) || (idForChunk.z >= numPointsPerAxis))
+    {
+        return;
+    }
+
+    uint indexForChunk = getIndexById(idForChunk);
+    densityField[indexForChunk] += weight * brushTex[id] * delta;
+}

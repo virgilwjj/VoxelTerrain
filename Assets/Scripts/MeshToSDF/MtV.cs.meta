@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: d22f67be5d54f804482e4296b8292a98
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _meshToSDF: {fileID: 7200000, guid: 9a6dda0ae45cd06408ad65fe1462d835, type: 3}
+  - _jumpFloodAssignment: {fileID: 7200000, guid: 6c3224170af574444bb962ca7a2143ac, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

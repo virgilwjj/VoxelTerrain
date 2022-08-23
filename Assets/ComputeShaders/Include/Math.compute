@@ -1,0 +1,22 @@
+#ifndef MATH
+#define MATH
+
+bool isEqual(float lhs, float rhs)
+{
+    float num = lhs - rhs;
+    return -0.001 < num && num < 0.001;
+}
+
+bool isGreatEqual(float lhs, float rhs)
+{
+    float num = lhs - rhs;
+    return -0.001 < num;
+}
+
+bool isLowerEqual(float lhs, float rhs)
+{
+    float num = lhs - rhs;
+    return num < 0.001;
+}
+
+#endif

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e13a7acedbdef10439e50b6eecc3668a, type: 3}
+  m_Name: LodSetting
+  m_EditorClassIdentifier: 
+  _levelOfDetail: 8
+  _lodThresholds:
+  - 0
+  - 32
+  - 64
+  - 128
+  - 256
+  - 512
+  - 1024
+  - 2048
+  - 4096
+  - 8192
+  _lodMaterials:
+  - {fileID: 2100000, guid: d024a94f607f95c49a93ed2a1a88304b, type: 2}
+  - {fileID: 2100000, guid: 2e58a1bdee837654fa58ba378c3d6c9e, type: 2}
+  - {fileID: 2100000, guid: 3e4db370b81f8f5458e807d54dcd9c60, type: 2}
+  - {fileID: 2100000, guid: c5f6dfeb1cb90cd4aa60d49fb382e74e, type: 2}
+  - {fileID: 2100000, guid: a96316b4b591e3f4f849cb27d183e73d, type: 2}
+  - {fileID: 2100000, guid: 38d7cf070c3f0914fb89f421b536a43b, type: 2}
+  - {fileID: 2100000, guid: 97a2141f531ad7446a5d3c019647af97, type: 2}
+  - {fileID: 2100000, guid: 4320a271c6bad4c499e48d006a613c47, type: 2}
+  - {fileID: 2100000, guid: a723cd453674eef41b047cdc5dbb2e14, type: 2}
+  - {fileID: 2100000, guid: 980ae9102085aa04bb00b1b9cebe1832, type: 2}

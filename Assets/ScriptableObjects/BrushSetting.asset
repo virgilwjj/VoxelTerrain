@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d52053e6343934b8f7b1c0f8f05dbf, type: 3}
+  m_Name: BrushSetting
+  m_EditorClassIdentifier: 
+  _sphereBrushTex2: {fileID: 11700000, guid: 0221f83dbe69bf14881806cf4156d537, type: 2}
+  _sphereBrushTex3: {fileID: 11700000, guid: ca0584edfd217194482b6305a4ec6663, type: 2}
+  _sphereBrushTex4: {fileID: 11700000, guid: dedcb0fe52197894b8ef8e9da05fe005, type: 2}
+  _sphereBrushTex5: {fileID: 11700000, guid: b0c072ed78f771a4f8166595136698c4, type: 2}
+  _sphereBrushTex6: {fileID: 11700000, guid: 2cdd2bf89051d1645ad47a928ffc4c02, type: 2}
+  _sphereBrushTex7: {fileID: 11700000, guid: 0a2f7ed185364974e94043422f608fd5, type: 2}
+  _sphereBrushTex8: {fileID: 11700000, guid: 517232f1958083e4db926f9d0b153a47, type: 2}
+  _sphereBrushTex9: {fileID: 11700000, guid: faa6a038a8e80324f9193d3c10ed8339, type: 2}
+  _sphereBrushTex10: {fileID: 11700000, guid: 19e3fbd557c5b414d9b0401361648545, type: 2}
+  _sphereBrushTex11: {fileID: 11700000, guid: f3564d6f51d824e469087785211de532, type: 2}
+  _sphereBrushTex12: {fileID: 11700000, guid: 48e43eabd1c255447b7bbc69394ebd63, type: 2}
+  _sphereBrushTex13: {fileID: 11700000, guid: eccf45af67bc2b149a5751210d4c3b7f, type: 2}
+  _sphereBrushTex14: {fileID: 11700000, guid: 349c3a3d54a13914ea569d197c0b9a8d, type: 2}
+  _cubeBrushTex2: {fileID: 11700000, guid: f25af9f30fe68fd4baf7096447128533, type: 2}
+  _cubeBrushTex3: {fileID: 11700000, guid: e1a17bbcbfb93784ab34af20018e6361, type: 2}
+  _cubeBrushTex4: {fileID: 11700000, guid: ef93f5c3fcf0da94f9b8d9dd19633367, type: 2}
+  _cubeBrushTex5: {fileID: 11700000, guid: dbdf8863fb6b087448e011c19802368b, type: 2}
+  _cubeBrushTex6: {fileID: 11700000, guid: 5d175c08b2219a74ab31a88e944e7dbf, type: 2}
+  _cubeBrushTex7: {fileID: 11700000, guid: bcf70f247fd9aaf4282ba7753bc191f2, type: 2}
+  _cubeBrushTex8: {fileID: 11700000, guid: a27f1a5c1c9b79b46896aad58a1c2bbb, type: 2}
+  _cubeBrushTex9: {fileID: 11700000, guid: 7cb24b6ce9e7bdf4ea7d36fa8ad7de39, type: 2}
+  _cubeBrushTex10: {fileID: 11700000, guid: 34f638d497489114a9ebf6fcf4028f2e, type: 2}
+  _cubeBrushTex11: {fileID: 11700000, guid: 6a222d240dbdbec4f8d499c6d7e61cd1, type: 2}
+  _cubeBrushTex12: {fileID: 11700000, guid: 52d984315ca1a4a4486947ef37335bb4, type: 2}
+  _cubeBrushTex13: {fileID: 11700000, guid: 8d1b39b7ed652d044a69d83669fbfdae, type: 2}
+  _cubeBrushTex14: {fileID: 11700000, guid: fc46ac400c41c874ca3a73fa542252f2, type: 2}

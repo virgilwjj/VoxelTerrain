@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 8390df3e5edcc8f4780131bf942edd85
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _chunkSetting: {fileID: 11400000, guid: ee2bb24cb7d63784aa64a0a892e8444a, type: 2}
+  - _lodSetting: {fileID: 11400000, guid: 41b8e4dd89403984dbfc193773a84bc7, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
